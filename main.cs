@@ -231,6 +231,7 @@ class Program
         {
             string[] leg = { "00", "01", "11", "10" };
             string s = "";
+     // proveriti da li je matrica puna jedinica
             //trazimo osmice
             //vertikalne osmice
             for (int i = 0; i < 4; i++)
@@ -308,6 +309,83 @@ class Program
                         s += "+";
                     }
                     s +=el;
+                }
+            }
+            return s;
+        }
+  static string OdrediIMinimalizujOsmiceDNF(int[,] mat, string a, string b, string c, string d)
+        {
+            string[] leg = { "00", "01", "11", "10" };
+            string s = "";
+            //trazimo osmice
+            //vertikalne osmice
+            for (int i = 0; i < 4; i++)
+            {
+                int suma = 0;
+                for (int j = 0; j < 4; j++)
+                {
+                    suma += mat[j, i];
+                    suma += mat[j, (i + 1) % 4];
+                }
+                if (suma == 0)
+                {
+                    string el = "";
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                    {
+                        el +=c;
+                    }
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                    {
+                        el += "!"+c;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                    {
+                        el += d;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                    {
+                        el += "!"+d;
+                    }
+                    if (s != "")
+                    {
+                        s += "+";
+                    }
+                    s += el;
+                }
+            }
+            //horizontalne osmice
+            for (int i = 0; i < 4; i++)
+            {
+                int suma = 0;
+                for (int j = 0; j < 4; j++)
+                {
+                    suma += mat[i, j];
+                    suma += mat[(i + 1) % 4, j];
+                }
+                if (suma == 0)
+                {
+                    string el = "";
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                    {
+                        el +=a;
+                    }
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                    {
+                        el += "!"+a;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                    {
+                        el += b;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                    {
+                        el += "!"+b;
+                    }
+                    if (s != "")
+                    {
+                        s += "+";
+                    }
+                    s += el;
                 }
             }
             return s;
