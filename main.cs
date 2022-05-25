@@ -227,7 +227,7 @@ class Program
     foreach (string str in niz) if (str == s) return true;
     return false;
   }
-   static string OdrediIMinimalizujOsmice(int[,] mat)
+   static string OdrediIMinimalizujOsmice(int[,] mat,string a,string b,string c,string d)
         {
             string[] leg = { "00", "01", "11", "10" };
             string s = "";
@@ -236,21 +236,21 @@ class Program
             for (int i = 0; i < 4; i++)
             {
                 int suma = 0;
-                for (int b = 0; b < 4; b++) 
+                for (int j = 0; j < 4; j++)
                 {
-                    suma += mat[b, i];
-                    suma += mat[b, (i + 1) % 4] ;
+                    suma += mat[j, i];
+                    suma += mat[j, (i + 1) % 4];
                 }
                 if (suma == 8)
                 {
                     string el = "";
                     if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
                     {
-                        el += "!x3";
+                        el += "!"+c;
                     }
                     if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
                     {
-                        el += "x3";
+                        el += c;
                     }
                     if (el != "")
                     {
@@ -258,38 +258,38 @@ class Program
                     }
                     if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
                     {
-                        el += "!x4";
+                        el += "!"+d;
                     }
                     if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
                     {
-                        el += "x4";
+                        el += d;
                     }
                     if (s != "")
                     {
                         s += "+";
                     }
-                    s += "("+el+")";
+                    s +=el ;
                 }
             }
             //horizontalne osmice
             for (int i = 0; i < 4; i++)
             {
                 int suma = 0;
-                for (int b = 0; b < 4; b++)
+                for (int j = 0; j < 4; j++)
                 {
-                    suma += mat[i, b];
-                    suma += mat[(i + 1) % 4,b];
+                    suma += mat[i, j];
+                    suma += mat[(i + 1) % 4, j];
                 }
                 if (suma == 8)
                 {
                     string el = "";
                     if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
                     {
-                        el += "!x1";
+                        el += "!"+a;
                     }
                     if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
                     {
-                        el += "x1";
+                        el += a;
                     }
                     if (el != "")
                     {
@@ -297,17 +297,17 @@ class Program
                     }
                     if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
                     {
-                        el += "!x2";
+                        el += "!"+b;
                     }
                     if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
                     {
-                        el += "x2";
+                        el += b;
                     }
                     if (s != "")
                     {
                         s += "+";
                     }
-                    s += "(" + el + ")";
+                    s +=el;
                 }
             }
             return s;
