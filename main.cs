@@ -1,3 +1,5 @@
+
+
 //Ispis u koracima
 //Kreiranje tablice na osnovu izraza
 
@@ -8,10 +10,183 @@ class Program
   static char[,] matrica = new char[,]{};
   static string forma = "";
   static string[] simboli = new string[] {};
+  static char dnfKnf = '1';
+
+  static bool prekiniAlUnos = false;
   
   static void Main (string[] args)
   {
       UnosPodataka();
+      string krajnjiIzraz = "";
+      char trenutnaVelicina = '2', obrnutoDnfKnf;
+      bool tacnost = true, provera = true; ;
+      int pocetakX = 0, pocetakY = 0, krajX = 0, krajY = 0;
+      char[,] temp = new char[4, 4], temp2 = new char[4, 4];
+      //pravi kopiju karte
+      for (int i = 0; i < matrica.GetLength(0); i++)
+        {
+           for (int j = 0; j < matrica.GetLength(1); j++)
+            {
+              temp[i, j] = matrica[i, j];
+            }
+        }
+      for (int i = 0; i < matrica.GetLength(0); i++)
+        {
+          for (int j = 0; j < matrica.GetLength(1); j++)
+            {
+              temp2[i, j] = matrica[i, j];
+            }
+        }
+
+      if (dnfKnf == '1') obrnutoDnfKnf = '0';
+        else obrnutoDnfKnf = '1';
+
+      //odredjivanje parametara tako da gledaju vodoravne podmatrice
+      for (int br = 0; br < 7; br++)
+        {
+          //odredjuje parametre tako da gledaju razlicite grupe
+          switch (br)
+            {
+              case 0://vodoravne grupe od 8
+                krajY = 2;
+                pocetakX=0;
+                pocetakY=0;
+                krajX = 4;
+                trenutnaVelicina = '8';
+                break;
+              case 1://vodoravne grupe od 4
+                 krajY = 1;
+                 pocetakX=0;
+                 pocetakY=0;
+                 krajX = 4;
+                 trenutnaVelicina = '4';
+                 break;
+              case 2://uspravne grupe od 8
+                 krajY = 4;
+                 pocetakX=0;
+                 pocetakY=0;
+                 krajX = 2;
+                 trenutnaVelicina = '8';
+                 break;
+              case 3://uspravne grupe od 4
+                 krajY = 4;
+                 pocetakX=0;
+                 pocetakY=0;
+                 krajX = 1;
+                 trenutnaVelicina = '4';
+                 break;
+              case 4://grupe 2x2
+                 krajY = 2;
+                 pocetakX=0;
+                 pocetakY=0;
+                 krajX = 2;
+                 trenutnaVelicina = '4';
+                 break;
+              case 5://grupe od 2 polja vodoravno
+                 krajY = 1;
+                 pocetakX=0;
+                 pocetakY=0;
+                 krajX = 2;
+                 trenutnaVelicina = '2';
+                 break;
+              case 6://grupe od 2 polja uspravno
+                 krajY = 2;
+                 pocetakX=0;
+                 pocetakY=0;
+                 krajX = 1;
+                 trenutnaVelicina = '2';
+                 break;
+              default:
+                 break;
+                }
+        while (krajY <= 5 && krajX <= 5)//kaze sve dok je <= od 5 da bi u poslednjem krugu mogao da gleda i poslednju i prvu kolonu
+        {
+          tacnost = true;
+          provera = false;
+          for (int i = pocetakY; i < krajY; i++)
+            {
+              for (int j = pocetakX; j < krajX; j++)
+                {
+                  //proverava da li je bilo koja od vrednosti u podmatrici koju posmatra suprotna od trazene
+                  if (temp[i % 4, j % 4] == obrnutoDnfKnf) { tacnost = false; break; }
+                  if (temp[i % 4, j % 4] == dnfKnf) provera = true;
+                }
+              if (!tacnost) break;
+            }
+          //ako je posmatrana podmatrica dobra ovo ce je pretvoriti u odgovarajucu vrednost
+          if (tacnost && provera)
+            {
+              for (int i = pocetakY; i < krajY; i++)
+                {
+                   for (int j = pocetakX; j < krajX; j++) { temp[i % 4, j % 4] = trenutnaVelicina; matrica[i % 4, j % 4] = trenutnaVelicina; }
+                }
+                
+                //smanjivanje
+                if(br == 0 || br == 2)//u ovim slucajevima su osmice
+                {
+                  //if(dnfKnf=='0')krajnjiIzraz += OdrediIMinimalizujOsmice();
+                  //else krajnjiIzraz += OdrediIMinimalizujOsmiceDNF();
+                }
+                else if(br == 1 || br == 3 || br == 4)//u ovim slucajevima su cetvorke
+                {
+                  //ovde treba da dodje smanjivanje za cetvorke
+                }
+                else if(br == 5 || br == 6)//u ovim slucajevima su dvojke
+                {
+                  //ovde treba da dodje smanjivanje za dvojke
+                }
+                //crtanje
+                IspisivanjeTablice();
+                //ubacivanje starih vrednosti u matricu
+                for (int i = 0; i < 4; i++)
+                  {
+                    for (int j = 0; j < 4; j++)
+                      {
+                        matrica[i, j] = temp2[i, j];
+                      }
+                  }
+            }
+        //odredjuje koji parametri se inkrementiraju
+        switch (br)
+          {
+          case 0:
+          case 1://vodoravne grupe cetvorki i osmica
+            pocetakY++;
+            krajY++;
+            break;
+          case 2:
+          case 3://uspravne grupe cetvorki i osmica
+            pocetakX++;
+            krajX++;
+            break;
+          case 4:
+          case 5://grupe 2x2 i vodoravne dvojke
+            pocetakX++;
+            krajX++;
+            if (krajX == 6)
+              {
+                pocetakX = 0;
+                krajX = 2;
+                pocetakY++;
+                krajY++;
+              }
+             break;
+          case 6://uspravne dvojke
+            pocetakX++;
+            krajX++;
+            if (krajX == 6)
+              {
+                pocetakX = 0;
+                krajX = 1;
+                pocetakY++;
+                krajY++;
+              }
+            break;
+          default:
+            break;
+          }
+      }
+    }
   }
   static string opcije(string[] mogucnosti, string ispis)//izbor knf/dnf ili izbor tablica/algebarski izraz
   {
@@ -126,45 +301,53 @@ class Program
           bool v = true;
           u = Console.ReadLine();
           TraziPrekid(u);
-          int i = 0;
-          foreach (char c in u)
+          if (u == ".")
           {
-             if (!char.IsLetter(c))
-             {
-                 if (c == ' ')
-                 {
-                    Console.WriteLine("Razmaci nisu dozvoljeni u imenima promenljivih.");
-                    v = false;
-                 }
-                 else if (i == 0) 
-                 {
-                   Console.WriteLine("Na prvom mestu imena promenljive su dozvoljena samo slova."); 
-                    v = false;
-                 }
-              }
-              i++;
+            prekiniAlUnos = true;
+            validanUnos = true;
           }
-          foreach (string zs in zabranjeniSimboli)
+          if (!prekiniAlUnos)
           {
-              if (u.Contains(zs))
-              {
-                Console.WriteLine("Unos je nevažeći. Ime promenljive ne sme da sadrži simbole ili reči koje se odnose na operacije, na primer, ''I''.");
-                v = false;
-              }
-          }
-          validanUnos = v;
-          if (u != "*")
-          {
-              if (!nizSadrzi(simboli, u.ToString()))
-              {
-                if (validanUnos)
-                {
-                  Array.Resize(ref simboli, simboli.Length+1);
-                  simboli[simboli.Length-1] = u.ToString();
-                  brPromenljivih++;
+            int i = 0;
+            foreach (char c in u)
+            {
+               if (!char.IsLetter(c))
+               {
+                   if (c == ' ')
+                   {
+                      Console.WriteLine("Razmaci nisu dozvoljeni u imenima promenljivih.");
+                      v = false;
+                   }
+                   else if (i == 0) 
+                   {
+                     Console.WriteLine("Na prvom mestu imena promenljive su dozvoljena samo slova."); 
+                      v = false;
+                   }
                 }
-              }
-              else Console.WriteLine("Već ste uneli ovaj simbol.");
+                i++;
+            }
+            foreach (string zs in zabranjeniSimboli)
+            {
+                if (u.Contains(zs))
+                {
+                  Console.WriteLine("Unos je nevažeći. Ime promenljive ne sme da sadrži simbole ili reči koje se odnose na operacije, na primer, ''I''.");
+                  v = false;
+                }
+            }
+            validanUnos = v;
+            if (u != "*")
+            {
+                if (!nizSadrzi(simboli, u.ToString()))
+                {
+                  if (validanUnos)
+                  {
+                    Array.Resize(ref simboli, simboli.Length+1);
+                    simboli[simboli.Length-1] = u.ToString();
+                    brPromenljivih++;
+                  }
+                }
+                else Console.WriteLine("Već ste uneli ovaj simbol.");
+            }
           }
       }
   }
@@ -180,10 +363,11 @@ class Program
       simboli = new string[]{};
       if (rU == "DA")
       {
-          Console.WriteLine("Unesite po jedan simbol u redu. Unos završavate znakom ''*''. Dozvoljena su do 4 simbola.");
+          Console.WriteLine("Unesite po jedan simbol u redu. Unos završavate znakom ''.''. Dozvoljena su do 4 simbola.");
           string u = string.Empty;
           int brPromenljivih = 0;
-          while (u != "*" && brPromenljivih < 4)
+          prekiniAlUnos = false;
+          while (!prekiniAlUnos && brPromenljivih < 4)
           {
               UnosPromenljivih(ref brPromenljivih, ref simboli);
           }
@@ -193,12 +377,29 @@ class Program
         bool validno = false;
         while (!validno)
         {
-          bool greska = false, slovoGreska = false;
+          bool greska = false, slovoGreska = false, razmakGreska = false;
           Console.WriteLine("Unesite izraz: ");
           string s = Console.ReadLine();
           TraziPrekid(s);
           string[] e = s.Split(' ');
           simboli = new string[] {};
+          int simboliTL = 1; //broji koliko simbola ima pre njihovog pojedinacnog proveravanja, da bi se proverio broj razmaka.
+          bool broji = false;
+          foreach (char c in s)
+          {
+            if (broji)
+            {
+                if (char.IsLetter(c))
+                {
+                  simboliTL++;
+                  broji = false;
+                }
+            }
+            if (!broji && !char.IsLetter(c))
+            {
+               broji = true;
+            }
+          }
           foreach (string str in e)
           {
             string[] dozvoljeni = new string[] {"I", "AND", "*", "∙", "ILI", "OR", "+", "NE", "NOT", "¬", "′", "EksILI", "XOR", "⊕", "NI", "NAND","NILI","NOR", "(",")"};
@@ -208,8 +409,10 @@ class Program
                 simboli[simboli.Length-1] = str;
             }
           }
-          foreach (string str in simboli) if (!char.IsLetter(str[0])) greska = true;  slovoGreska = true;
+          foreach (string str in simboli)
+          {Console.WriteLine(str); if (!char.IsLetter(str[0])) {greska = true;  slovoGreska = true;}}
           if (simboli.Length == 0) greska = true;
+          if (simboli.Length != simboliTL) greska = true; razmakGreska = true;
           validno = !greska;
           if (!greska)
           {
@@ -218,6 +421,7 @@ class Program
           }
           else if (slovoGreska) Console.WriteLine("Simbol mora da počne slovom.");
           else if (simboli.Length == 0) Console.WriteLine("U izrazu nema simbola.");
+          else if (razmakGreska) Console.WriteLine("Između svakog simbola i operacije mora da bude tačno jedan razmak.");
         }
       }
       forma = opcije(new string[] {"KNF","DNF"},"KNF ili DNF : ");
@@ -227,6 +431,329 @@ class Program
     foreach (string str in niz) if (str == s) return true;
     return false;
   }
+  private static string MinimalizujDvojkeKadaImaCetriPromenjive(int[,] mat, string a, string b, string c, string d)
+        {
+
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            //vertikalne dvojke
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    int suma = 0;
+                    suma += mat[i, j];
+                    suma += mat[(i + 1) % 4, j];
+                    if (suma == 0)
+                    {
+                        string el = "";
+                        //a b-vrste
+                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                        {
+                            el += a;
+                        }
+                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                        {
+                            el += "!" + a;
+                        }
+                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                        {
+                            el += b;
+                        }
+                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                        {
+                            el += "!" + b;
+                        }
+                        //c i d-kolone
+                        if (el != "")
+                        {
+                            el += "+";
+                        }
+                        //uzeto od vertikalnih cetvorki
+                        if (leg[j][0] == '0')
+                        {
+                            el += c + "+";
+                        }
+                        else
+                        {
+                            el += "!" + c + "+";
+                        }
+                        if (leg[j][1] == '1')
+                        {
+                            el += "!" + d;
+                        }
+                        else
+                        {
+                            el += d;
+                        }
+                        s += "(" + el + ")";
+                    }
+                }
+
+            }
+            //horizontalne dvojke
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    int suma = 0;
+                    suma += mat[i, j];
+                    suma += mat[i, (j + 1) % 4];
+                    if (suma == 0)
+                    {
+                        string el = "";
+                        //uzeto od vertikalnih cetvorki
+                        if (leg[i][0] == '0')
+                        {
+                            el += a + "+";
+                        }
+                        else
+                        {
+                            el += "!" + a + "+";
+                        }
+                        if (leg[i][1] == '1')
+                        {
+                            el += "!" + b;
+                        }
+                        else
+                        {
+                            el += b;
+                        }
+                        if (el != "")
+                        {
+                            el += "+";
+                        }
+                        //c d-vrste
+                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '0')
+                        {
+                            el += c;
+                        }
+                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '1')
+                        {
+                            el += "!" + c;
+                        }
+                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '0')
+                        {
+                            el += d;
+                        }
+                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '1')
+                        {
+                            el += "!" + c;
+                        }
+                        //c i d-kolone
+                      
+                        s += "(" + el + ")";
+                    }
+                }
+
+            }
+            return s;
+        }
+        private static string MinimalizujCetvorkeKadaImaCetriPromenjive(int[,] mat, string a, string b, string c, string d)
+        {
+
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            //vertikalne cetvorke
+            for (int i = 0; i < 4; i++)
+            {
+                int suma = 0;
+                for (int j = 0; j < 4; j++)
+                {
+                    suma += mat[j, i];
+                    //suma += mat[j, (i + 1) % 4];
+                }
+                if (suma == 0)
+                {
+                    string el = "";
+                    if (leg[i][0] == '0')
+                    {
+                        el += c+"+";
+                    }
+                    else
+                    {
+                        el += "!" + c+"+";
+                    }
+                    if (leg[i][1] == '1')
+                    {
+                        el += "!" + d;
+                    }
+                    else
+                    {
+                        el += d;
+                    }
+                    s += "("+el+")";
+                    
+                }
+            }
+            //horizontalne cetvorke
+            for (int i = 0; i < 4; i++)
+            {
+                int suma = 0;
+                for (int j = 0; j < 4; j++)
+                {
+                    suma += mat[i, j];
+                }
+                if (suma == 0)
+                {
+                    string el = "";
+                    if (leg[i][0] == '0')
+                    {
+                        el += a + "+";
+                    }
+                    else
+                    {
+                        el += "!" + a + "+";
+                    }
+                    if (leg[i][1] == '1')
+                    {
+                        el += "!" + b;
+                    }
+                    else
+                    {
+                        el += b;
+                    }
+                    s += "(" + el + ")";
+
+                }
+            }
+            //kvadratne cetvorke
+            for (int i = 0; i < 4; i++)
+            {                
+                for (int j = 0; j < 4; j++)
+                {
+                    int suma = 0;
+                    suma += mat[i, j];
+                    suma += mat[i, (j + 1) % 4];
+                    suma += mat[(i + 1) % 4, j];
+                    suma += mat[(i + 1) % 4, (j + 1) % 4];
+                    if (suma == 0)
+                    {
+                        string el = "";
+                        //a b-vrste
+                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                        {
+                            el += a;
+                        }
+                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                        {
+                            el += "!" + a;
+                        }
+                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                        {
+                            el += b;
+                        }
+                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                        {
+                            el += "!" + b;
+                        }
+                        //c i d-kolone
+                        if (el != "")
+                        {
+                            el += "+";
+                        }
+                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '0')
+                        {
+                            el += c;
+                        }
+                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '1')
+                        {
+                            el += "!" + c;
+                        }
+                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '0')
+                        {
+                            el += d;
+                        }
+                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '1')
+                        {
+                            el += "!" + d;
+                        }
+                        s += el;
+                    }
+                }
+                
+            }
+            return s;
+        }
+
+        private static string MinimalizujOsmiceKadaImaCetriPromenjive(int[,] mat, string a, string b, string c, string d)
+        {
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            //vertikalne osmice
+            for (int i = 0; i < 4; i++)
+            {
+                int suma = 0;
+                for (int j = 0; j < 4; j++)
+                {
+                    suma += mat[j, i];
+                    suma += mat[j, (i + 1) % 4];
+                }
+                if (suma == 0)
+                {
+                    string el = "";
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                    {
+                        el += c;
+                    }
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                    {
+                        el += "!" + c;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                    {
+                        el += d;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                    {
+                        el += "!" + d;
+                    }
+                    if (s != "")
+                    {
+                        s += "+";
+                    }
+                    s += el;
+                }
+            }
+            //horizontalne osmice
+            for (int i = 0; i < 4; i++)
+            {
+                
+                int suma = 0;
+                for (int j = 0; j < 4; j++)
+                {
+                    suma += mat[i, j];
+                    suma += mat[(i + 1) % 4, j];
+                }
+                if (suma == 0)
+                {
+                    string el = "";
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                    {
+                        el += a;
+                    }
+                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                    {
+                        el += "!" + a;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                    {
+                        el += b;
+                    }
+                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                    {
+                        el += "!" + b;
+                    }
+                    if (s != "")
+                    {
+                        s += "+";
+                    }
+                    s += el;
+                }
+                
+            }
+            return s;
+        }
    static string OdrediIMinimalizujOsmice(int[,] mat,string a,string b,string c,string d)
         {
             string[] leg = { "00", "01", "11", "10" };
@@ -390,259 +917,7 @@ class Program
             }
             return s;
         }
-  static void PronalazenjeGrupa(char[,] karta,char dnfKnf,char neodredjeno, out char[,] kartaDvojki, out char[,] kartaCetvorki, out char[,] kartaOsmica)
-        {
-            char trenutnaVelicina = '2',obrnutoDnfKnf;
-            bool tacnost = true,provera=true;
-            int pocetakX,pocetakY,krajX,krajY;
-            char[,] temp = new char[4, 4];
-            //inicijalizacija karata razlicitih grupa
-            kartaDvojki = new char[4, 4];
-            kartaCetvorki = new char[4, 4];
-            kartaOsmica = new char[4, 4];
-            //pravi kopiju karte
-            for (int i = 0; i < karta.GetLength(0); i++)
-            {
-                for (int j = 0; j < karta.GetLength(1); j++)
-                {
-                    temp[i, j] = karta[i, j];
-                }
-            }
-
-            if (dnfKnf == '1') obrnutoDnfKnf = '0';
-            else obrnutoDnfKnf= '1';
-            //trazi dvojke i belezi ih u matricu sa dvojkama
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    if (karta[i,j] == dnfKnf)
-                    {
-                        //uporedjuje sa poljem ispred
-                        if (karta[i, (j + 1) % 4] == dnfKnf || karta[i, (j + 1)%4] == trenutnaVelicina || karta[i, (j + 1) % 4] == neodredjeno)
-                        {
-                            kartaDvojki[i, j] = trenutnaVelicina;
-                            kartaDvojki[i, (j + 1) % 4] = trenutnaVelicina;
-                        }
-                        //uporedjuje sa poljem iza
-                        else if (karta[i, (j - 1 + 4) % 4] == dnfKnf || karta[i, (j - 1 + 4)%4] == trenutnaVelicina || karta[i, (j - 1 + 4) % 4] == neodredjeno)
-                        {
-                            kartaDvojki[i, j] = trenutnaVelicina;
-                            kartaDvojki[i, (j - 1 + 4) % 4] = trenutnaVelicina;
-                        }
-                        //uporedjuje sa poljem iznad
-                        else if (karta[(i - 1 + 4) % 4, j] == dnfKnf || karta[(i - 1 + 4) % 4, j] == trenutnaVelicina || karta[(i - 1 + 4) % 4, j] == neodredjeno)
-                        {
-                            kartaDvojki[i, j] = trenutnaVelicina;
-                            kartaDvojki[(i - 1 + 4) % 4, j] = trenutnaVelicina;
-                        }
-                        //uporedjuje sa poljem ispod
-                        else if (karta[(i + 1) % 4, j] == dnfKnf || karta[(i + 1) % 4, j] == trenutnaVelicina || karta[(i + 1) % 4, j] == neodredjeno)
-                        {
-                            kartaDvojki[i, j] = trenutnaVelicina;
-                            kartaDvojki[(i + 1) % 4, j] = trenutnaVelicina;
-                        }
-                        //ako nema istih vrednosti oko sebe
-                        else
-                        {
-                            kartaDvojki[i, j] = obrnutoDnfKnf;
-                        }
-                    }
-                }
-            }
-            //odredjivanje parametara tako da gledaju vodoravne podmatrice
-            krajY = 2;
-            pocetakY = 0;
-            pocetakX = 0;
-            krajX = 4;
-            trenutnaVelicina = '8';
-            //vodoravne cetvorke i osmice
-            while (krajY<=5)
-            {
-                tacnost = true;
-                for (int i = pocetakY; i < krajY; i++)
-                {
-                    for (int j = pocetakX; j < krajX; j++)
-                    {
-                        //proverava da li je bilo koja od vrednosti u podmatrici koju posmatra suprotna od trazene
-                        if (karta[i%4, j] == obrnutoDnfKnf) tacnost = false;
-                    }
-                }
-                //ako je posmatrana podmatrica dobra ovo ce je pretvoriti u odgovarajucu vrednost
-                if (tacnost)
-                {
-                    for (int i = pocetakY; i < krajY; i++)
-                    {
-                        for (int j = pocetakX; j < krajX; j++) karta[i % 4, j] = trenutnaVelicina;
-                    }
-                }
-                pocetakY++;
-                krajY++;
-                //prebacuje iz gledanja podmatrica od 8 u podmatrice od 4
-                if (krajY == 6 && provera)
-                {
-                    pocetakY = 0;
-                    krajY = 1;
-                    trenutnaVelicina = '4';
-                    provera = false;
-                    //kopira u matricu za osmice
-                    for (int i = 0; i < karta.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < karta.GetLength(1); j++)
-                        {
-                            if (karta[i, j] == '8') kartaOsmica[i, j] = karta[i, j];
-                        }
-                    }
-                    //vraca nazad stare vrednosti
-                    for (int i = 0; i < karta.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < karta.GetLength(1); j++) karta[i, j] = temp[i, j];
-                    }
-                }
-            }
-            //kopira u matricu za cetvorke
-            for (int i = 0; i < karta.GetLength(0); i++)
-            {
-                for (int j = 0; j < karta.GetLength(1); j++)
-                {
-                    if (karta[i, j] == '4') kartaCetvorki[i, j] = karta[i, j];
-                }
-            }
-            //vraca nazad stare vrednosti matrice
-            for (int i = 0; i < karta.GetLength(0); i++)
-            {
-                for (int j = 0; j < karta.GetLength(1); j++)
-                {
-                    karta[i, j] = temp[i, j];
-                }
-            }
-            //odredjivanje parametara tako da gledaju uspravne podmatrice
-            pocetakY = 0;
-            krajY = 4;
-            pocetakX = 0;
-            krajX = 2;
-            provera = true;
-            trenutnaVelicina = '8';
-            //uspravne cetvorke i osmice
-            while (krajX <= 5)
-            {
-
-                tacnost = true;
-                for (int i = pocetakY; i < krajY; i++)
-                {
-                    for (int j = pocetakX; j < krajX; j++)
-                    {
-                        //proverava da li je bilo koja od vrednosti u podmatrici koju posmatra suprotna od trazene
-                        if (karta[i, j%4] == obrnutoDnfKnf)tacnost = false;
-                    }
-                }
-                //ako je posmatrana podmatrica dobra ovo je pretvara u odgovarajucu vrednost
-                if (tacnost)
-                {
-                    for (int i = pocetakY; i < krajY; i++)
-                    {
-                        for (int j = pocetakX; j < krajX; j++) karta[i, j % 4] = trenutnaVelicina;
-                    }
-                }
-                pocetakX++;
-                krajX++;
-                //prebacuje iz gledanja grupa od 8 u grupe od 4
-                if (krajX == 6 && provera)
-                {
-                    pocetakX = 0;
-                    krajX = 1;
-                    trenutnaVelicina = '4';
-                    provera = false;
-                    //kopira u matricu za osmice
-                    for (int i = 0; i < karta.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < karta.GetLength(1); j++)
-                        {
-                            if (karta[i, j] == '8') kartaOsmica[i, j] = karta[i, j];
-                        }
-                    }
-                    //vraca nazad stare vrednosti matrice
-                    for (int i = 0; i < karta.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < karta.GetLength(1); j++)
-                        {
-                            karta[i, j] = temp[i, j];
-                        }
-                    }
-                }
-            }
-            //kopira u matricu za cetvorke
-            for (int i = 0; i < karta.GetLength(0); i++)
-            {
-                for (int j = 0; j < karta.GetLength(1); j++)
-                {
-                    if (karta[i, j] == '4') kartaCetvorki[i, j] = karta[i, j];
-                }
-            }
-            //vraca nazad stare vrednosti matrice
-            for (int i = 0; i < karta.GetLength(0); i++)
-            {
-                for (int j = 0; j < karta.GetLength(1); j++)
-                {
-                    karta[i, j] = temp[i, j];
-                }
-            }
-            //odredjivanje parametara tako da gledaju ssvaki 2x2 kvadrat
-            pocetakY = 0;
-            krajY = 2;
-            pocetakX = 0;
-            krajX = 2;
-            provera = true;
-            trenutnaVelicina = '4';
-            //2x2 kvadrati
-            while (krajY <= 5)
-            {
-
-                tacnost = true;
-                for (int i = pocetakY; i < krajY; i++)
-                {
-                    for (int j = pocetakX; j < krajX; j++)
-                    {
-                        //proverava da li je bilo koja od vrednosti u podmatrici koju posmatra suprotna od trazene
-                        if (karta[i%4, j % 4] == obrnutoDnfKnf) tacnost = false;
-                    }
-                }
-                //ako je posmatrana podmatrica dobra ovo je pretvara u odgovarajucu vrednost
-                if (tacnost)
-                {
-                    for (int i = pocetakY; i < krajY; i++)
-                    {
-                        for (int j = pocetakX; j < krajX; j++) karta[i%4, j % 4] = trenutnaVelicina;
-                    }
-                }
-                pocetakX++;
-                krajX++;
-                //nakon sto gleda grupo od kraja i pocetka vraca vrednosti na pocetne i gleda sledeca 2 reda
-                if (krajX == 6 && provera)
-                {
-                    pocetakX = 0;
-                    krajX = 2;
-                    pocetakY++;
-                    krajY++;
-                }
-            }
-            //kopira u matricu za cetvorke
-            for (int i = 0; i < karta.GetLength(0); i++)
-            {
-                for (int j = 0; j < karta.GetLength(1); j++)
-                {
-                    if (karta[i, j] == '4') kartaCetvorki[i, j] = karta[i, j];
-                }
-            }
-            //vraca nazad stare vrednosti matrice
-            for (int i = 0; i < karta.GetLength(0); i++)
-            {
-                for (int j = 0; j < karta.GetLength(1); j++)
-                {
-                    karta[i, j] = temp[i, j];
-                }
-            }
-        }
+  
   static void IspisivanjeTablice()
     {
 		Console.ForegroundColor = ConsoleColor.White;
