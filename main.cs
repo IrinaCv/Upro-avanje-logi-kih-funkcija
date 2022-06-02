@@ -123,18 +123,19 @@ class Program
                 
                 //smanjivanje
                 if(br == 0 || br == 2)//u ovim slucajevima su osmice
-                {/*
-                    if(dnfKnf=='0')krajnjiIzraz += OdrediIMinimalizujOsmice();
-                    else krajnjiIzraz += OdrediIMinimalizujOsmiceDNF();
-                  */
+                { 
+                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujOsmiceKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
+                            else krajnjiIzraz += MinimalizujOsmiceDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
                 }
                 else if(br == 1 || br == 3 || br == 4)//u ovim slucajevima su cetvorke
                 {
-                  //ovde treba da dodje smanjivanje za cetvorke
+                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujCetvorkeKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
+                            else krajnjiIzraz += MinimalizujCetvorkeDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
                 }
                 else if(br == 5 || br == 6)//u ovim slucajevima su dvojke
                 {
-                  //ovde treba da dodje smanjivanje za dvojke
+                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujDvojkeKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
+                            else krajnjiIzraz += MinimalizujDvojkeDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
                 }
                 //crtanje
                 IspisivanjeTablice();
@@ -528,6 +529,102 @@ class Program
             }
             return s;
         }
+   private static string MinimalizujDvojkeDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
+        {
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            //vertikalne dvojke
+            if (brojac == 6)
+            {
+                string el = "";
+                //a b-vrste
+                if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '0')
+                {
+                    el += "!" + a;
+                }
+                if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '1')
+                {
+                    el +=a;
+                }
+                if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '0')
+                {
+                    el += "!" + b;
+                }
+                if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '1')
+                {
+                    el +=b;
+                }
+                //c i d-kolone
+                if (el != "")
+                {
+                    el += "+";
+                }
+                //uzeto od vertikalnih cetvorki
+                if (leg[pocetakX][0] == '0')
+                {
+                    el += "!" + c + "+";
+                }
+                else
+                {
+                    el +=c + "+";
+                }
+                if (leg[pocetakX][1] == '1')
+                {
+                    el +=d;
+                }
+                else
+                {
+                    el +="!"+ d;
+                }
+                s += "(" + el + ")";
+            }
+
+            //horizontalne dvojke
+            if (brojac == 5)
+            {
+                string el = "";
+                //a i b-vsrte
+                if (leg[pocetakY][0] == '0')
+                {
+                    el += a + "+";
+                }
+                else
+                {
+                    el += "!" + a + "+";
+                }
+                if (leg[pocetakY][1] == '1')
+                {
+                    el += "!" + b;
+                }
+                else
+                {
+                    el += b;
+                }
+                if (el != "")
+                {
+                    el += "+";
+                }
+                //c d-kolona
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
+                {
+                    el += c;
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
+                {
+                    el += "!" + c;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el += d;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el += "!" + c;
+                }
+                s += "(" + el + ")";
+            }
+            return s;
+        }
         private static string MinimalizujCetvorkeKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
             string s = "";
@@ -623,7 +720,101 @@ class Program
                     }
             return s;
         }
+private static string MinimalizujCetvorkeDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
+        {
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            //vertikalne cetvorke
+            if (brojac == 3)
+            {
+                string el = "";
+                if (leg[pocetakX][0] == '0')
+                {
+                    el += "!" + c + "+";
+                }
+                else
+                {
+                    el +=c + "+";
+                }
+                if (leg[pocetakX][1] == '1')
+                {
+                    el += d;
+                }
+                else
+                {
+                    el +="!"+ d;
+                }
+                s += "(" + el + ")";
+            }
+            //horizontalne cetvorke
+            if (brojac == 1)
+            {
+                string el = "";
+                if (leg[pocetakY][0] == '0')
+                {
+                    el += "!" + a + "+";
+                }
+                else
+                {
+                    el +=a + "+";
+                }
+                if (leg[pocetakY][1] == '1')
+                {
+                    el += b;
+                }
+                else
+                {
+                    el +="!"+ b;
+                }
+                s += "(" + el + ")";
 
+            }
+            //kvadratne cetvorke
+            if (brojac == 4)
+            {
+                string el = "";
+                //a/x1 i b/x2-vrste
+                if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '0')
+                {
+                    el += "!" + a;
+                }
+                if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '1')
+                {
+                    el +=a;
+                }
+                if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '0')
+                {
+                    el += "!" + b;
+                }
+                if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '1')
+                {
+                    el +=b;
+                }
+                //c i d-kolone
+                if (el != "")
+                {
+                    el += "+";
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
+                {
+                    el += "!" + c;
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
+                {
+                    el +=c;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el += "!" + d;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el +=d;
+                }
+                s += el;
+            }
+            return s;
+        }
         private static string MinimalizujOsmiceKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
             string s = "";
