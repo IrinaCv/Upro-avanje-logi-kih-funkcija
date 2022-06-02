@@ -123,9 +123,10 @@ class Program
                 
                 //smanjivanje
                 if(br == 0 || br == 2)//u ovim slucajevima su osmice
-                {
-                  //if(dnfKnf=='0')krajnjiIzraz += OdrediIMinimalizujOsmice();
-                  //else krajnjiIzraz += OdrediIMinimalizujOsmiceDNF();
+                {/*
+                    if(dnfKnf=='0')krajnjiIzraz += OdrediIMinimalizujOsmice();
+                    else krajnjiIzraz += OdrediIMinimalizujOsmiceDNF();
+                  */
                 }
                 else if(br == 1 || br == 3 || br == 4)//u ovim slucajevima su cetvorke
                 {
@@ -410,7 +411,7 @@ class Program
             }
           }
           foreach (string str in simboli)
-          {Console.WriteLine(str); if (!char.IsLetter(str[0])) {greska = true;  slovoGreska = true;}}
+          { if (!char.IsLetter(str[0])) {greska = true;  slovoGreska = true;}}
           if (simboli.Length == 0) greska = true;
           if (simboli.Length != simboliTL) greska = true; razmakGreska = true;
           validno = !greska;
@@ -431,36 +432,28 @@ class Program
     foreach (string str in niz) if (str == s) return true;
     return false;
   }
-  private static string MinimalizujDvojkeKadaImaCetriPromenjive(int[,] mat, string a, string b, string c, string d)
+  private static string MinimalizujDvojkeKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
-
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
             //vertikalne dvojke
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    int suma = 0;
-                    suma += mat[i, j];
-                    suma += mat[(i + 1) % 4, j];
-                    if (suma == 0)
+                    if (brojac == 6)
                     {
                         string el = "";
                         //a b-vrste
-                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                        if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '0')
                         {
                             el += a;
                         }
-                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                        if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '1')
                         {
                             el += "!" + a;
                         }
-                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                        if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '0')
                         {
                             el += b;
                         }
-                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                        if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '1')
                         {
                             el += "!" + b;
                         }
@@ -470,7 +463,7 @@ class Program
                             el += "+";
                         }
                         //uzeto od vertikalnih cetvorki
-                        if (leg[j][0] == '0')
+                        if (leg[pocetakX][0] == '0')
                         {
                             el += c + "+";
                         }
@@ -478,7 +471,7 @@ class Program
                         {
                             el += "!" + c + "+";
                         }
-                        if (leg[j][1] == '1')
+                        if (leg[pocetakX][1] == '1')
                         {
                             el += "!" + d;
                         }
@@ -488,22 +481,13 @@ class Program
                         }
                         s += "(" + el + ")";
                     }
-                }
-
-            }
+            
             //horizontalne dvojke
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    int suma = 0;
-                    suma += mat[i, j];
-                    suma += mat[i, (j + 1) % 4];
-                    if (suma == 0)
+                    if (brojac == 5)
                     {
                         string el = "";
-                        //uzeto od vertikalnih cetvorki
-                        if (leg[i][0] == '0')
+                //a i b-vsrte
+                        if (leg[pocetakY][0] == '0')
                         {
                             el += a + "+";
                         }
@@ -511,7 +495,7 @@ class Program
                         {
                             el += "!" + a + "+";
                         }
-                        if (leg[i][1] == '1')
+                        if (leg[pocetakY][1] == '1')
                         {
                             el += "!" + b;
                         }
@@ -523,81 +507,58 @@ class Program
                         {
                             el += "+";
                         }
-                        //c d-vrste
-                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '0')
+                        //c d-kolona
+                        if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
                         {
                             el += c;
                         }
-                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '1')
+                        if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
                         {
                             el += "!" + c;
                         }
-                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '0')
+                        if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
                         {
                             el += d;
                         }
-                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '1')
+                        if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
                         {
                             el += "!" + c;
                         }
-                        //c i d-kolone
-                      
                         s += "(" + el + ")";
-                    }
-                }
-
             }
             return s;
         }
-        private static string MinimalizujCetvorkeKadaImaCetriPromenjive(int[,] mat, string a, string b, string c, string d)
+        private static string MinimalizujCetvorkeKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
-
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
             //vertikalne cetvorke
-            for (int i = 0; i < 4; i++)
+            if (brojac==3)
             {
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
+                string el = "";
+                if (leg[pocetakX][0] == '0')
                 {
-                    suma += mat[j, i];
-                    //suma += mat[j, (i + 1) % 4];
+                    el += c + "+";
                 }
-                if (suma == 0)
+                else
                 {
-                    string el = "";
-                    if (leg[i][0] == '0')
-                    {
-                        el += c+"+";
-                    }
-                    else
-                    {
-                        el += "!" + c+"+";
-                    }
-                    if (leg[i][1] == '1')
-                    {
-                        el += "!" + d;
-                    }
-                    else
-                    {
-                        el += d;
-                    }
-                    s += "("+el+")";
-                    
+                    el += "!" + c + "+";
                 }
-            }
+                if (leg[pocetakX][1] == '1')
+                {
+                    el += "!" + d;
+                }
+                else
+                {
+                    el += d;
+                }
+                s += "(" + el + ")";
+            }    
             //horizontalne cetvorke
-            for (int i = 0; i < 4; i++)
-            {
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
-                {
-                    suma += mat[i, j];
-                }
-                if (suma == 0)
+                if (brojac == 1)
                 {
                     string el = "";
-                    if (leg[i][0] == '0')
+                    if (leg[pocetakY][0] == '0')
                     {
                         el += a + "+";
                     }
@@ -605,7 +566,7 @@ class Program
                     {
                         el += "!" + a + "+";
                     }
-                    if (leg[i][1] == '1')
+                    if (leg[pocetakY][1] == '1')
                     {
                         el += "!" + b;
                     }
@@ -616,34 +577,24 @@ class Program
                     s += "(" + el + ")";
 
                 }
-            }
             //kvadratne cetvorke
-            for (int i = 0; i < 4; i++)
-            {                
-                for (int j = 0; j < 4; j++)
-                {
-                    int suma = 0;
-                    suma += mat[i, j];
-                    suma += mat[i, (j + 1) % 4];
-                    suma += mat[(i + 1) % 4, j];
-                    suma += mat[(i + 1) % 4, (j + 1) % 4];
-                    if (suma == 0)
+                    if (brojac == 4)
                     {
                         string el = "";
-                        //a b-vrste
-                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                        //a/x1 i b/x2-vrste
+                        if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '0')
                         {
                             el += a;
                         }
-                        if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                        if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '1')
                         {
                             el += "!" + a;
                         }
-                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                        if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '0')
                         {
                             el += b;
                         }
-                        if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                        if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '1')
                         {
                             el += "!" + b;
                         }
@@ -652,95 +603,74 @@ class Program
                         {
                             el += "+";
                         }
-                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '0')
+                        if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
                         {
                             el += c;
                         }
-                        if (leg[j][0] == leg[(j + 1) % 4][0] && leg[j][0] == '1')
+                        if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
                         {
                             el += "!" + c;
                         }
-                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '0')
+                        if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
                         {
                             el += d;
                         }
-                        if (leg[j][1] == leg[(j + 1) % 4][1] && leg[j][1] == '1')
+                        if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
                         {
                             el += "!" + d;
                         }
                         s += el;
                     }
-                }
-                
-            }
             return s;
         }
 
-        private static string MinimalizujOsmiceKadaImaCetriPromenjive(int[,] mat, string a, string b, string c, string d)
+        private static string MinimalizujOsmiceKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
             //vertikalne osmice
-            for (int i = 0; i < 4; i++)
+            if (brojac==2)
             {
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
+                string el = "";
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
                 {
-                    suma += mat[j, i];
-                    suma += mat[j, (i + 1) % 4];
+                    el += c;
                 }
-                if (suma == 0)
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
                 {
-                    string el = "";
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
-                    {
-                        el += c;
-                    }
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
-                    {
-                        el += "!" + c;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
-                    {
-                        el += d;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
-                    {
-                        el += "!" + d;
-                    }
-                    if (s != "")
-                    {
-                        s += "+";
-                    }
-                    s += el;
+                    el += "!" + c;
                 }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el += d;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el += "!" + d;
+                }
+                if (s != "")
+                {
+                    s += "+";
+                }
+                s += el;
             }
             //horizontalne osmice
-            for (int i = 0; i < 4; i++)
-            {
-                
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
-                {
-                    suma += mat[i, j];
-                    suma += mat[(i + 1) % 4, j];
-                }
-                if (suma == 0)
+                if (brojac == 0)
                 {
                     string el = "";
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
+                    if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '0')
                     {
                         el += a;
                     }
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
+                    if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '1')
                     {
                         el += "!" + a;
                     }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
+                    if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '0')
                     {
                         el += b;
                     }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
+                    if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '1')
                     {
                         el += "!" + b;
                     }
@@ -750,174 +680,68 @@ class Program
                     }
                     s += el;
                 }
-                
-            }
+
             return s;
         }
-   static string OdrediIMinimalizujOsmice(int[,] mat,string a,string b,string c,string d)
+        private static string MinimalizujOsmiceDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
         {
-            string[] leg = { "00", "01", "11", "10" };
             string s = "";
-     // proveriti da li je matrica puna jedinica
-            //trazimo osmice
+            string[] leg = { "00", "01", "11", "10" };
             //vertikalne osmice
-            for (int i = 0; i < 4; i++)
+            if (brojac == 2)
             {
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
+                string el = "";
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
                 {
-                    suma += mat[j, i];
-                    suma += mat[j, (i + 1) % 4];
+                    el += "!" + c;
                 }
-                if (suma == 8)
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
                 {
-                    string el = "";
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
-                    {
-                        el += "!"+c;
-                    }
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
-                    {
-                        el += c;
-                    }
-                    if (el != "")
-                    {
-                        el += "*";
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
-                    {
-                        el += "!"+d;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
-                    {
-                        el += d;
-                    }
-                    if (s != "")
-                    {
-                        s += "+";
-                    }
-                    s +=el ;
+                    el +=c;
                 }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el += "!" + d;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el +=d;
+                }
+                if (s != "")
+                {
+                    s += "+";
+                }
+                s += el;
             }
             //horizontalne osmice
-            for (int i = 0; i < 4; i++)
+            if (brojac == 0)
             {
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
+                string el = "";
+                if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '0')
                 {
-                    suma += mat[i, j];
-                    suma += mat[(i + 1) % 4, j];
+                    el += "!" + a;
                 }
-                if (suma == 8)
+                if (leg[pocetakY][0] == leg[(pocetakY + 1) % 4][0] && leg[pocetakY][0] == '1')
                 {
-                    string el = "";
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
-                    {
-                        el += "!"+a;
-                    }
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
-                    {
-                        el += a;
-                    }
-                    if (el != "")
-                    {
-                        el += "*";
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
-                    {
-                        el += "!"+b;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
-                    {
-                        el += b;
-                    }
-                    if (s != "")
-                    {
-                        s += "+";
-                    }
-                    s +=el;
+                    el +=a;
                 }
+                if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '0')
+                {
+                    el += "!" + b;
+                }
+                if (leg[pocetakY][1] == leg[(pocetakY + 1) % 4][1] && leg[pocetakY][1] == '1')
+                {
+                    el +=b;
+                }
+                if (s != "")
+                {
+                    s += "+";
+                }
+                s += el;
             }
+
             return s;
         }
-  static string OdrediIMinimalizujOsmiceDNF(int[,] mat, string a, string b, string c, string d)
-        {
-            string[] leg = { "00", "01", "11", "10" };
-            string s = "";
-            //trazimo osmice
-            //vertikalne osmice
-            for (int i = 0; i < 4; i++)
-            {
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
-                {
-                    suma += mat[j, i];
-                    suma += mat[j, (i + 1) % 4];
-                }
-                if (suma == 0)
-                {
-                    string el = "";
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
-                    {
-                        el +=c;
-                    }
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
-                    {
-                        el += "!"+c;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
-                    {
-                        el += d;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
-                    {
-                        el += "!"+d;
-                    }
-                    if (s != "")
-                    {
-                        s += "+";
-                    }
-                    s += el;
-                }
-            }
-            //horizontalne osmice
-            for (int i = 0; i < 4; i++)
-            {
-                int suma = 0;
-                for (int j = 0; j < 4; j++)
-                {
-                    suma += mat[i, j];
-                    suma += mat[(i + 1) % 4, j];
-                }
-                if (suma == 0)
-                {
-                    string el = "";
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '0')
-                    {
-                        el +=a;
-                    }
-                    if (leg[i][0] == leg[(i + 1) % 4][0] && leg[i][0] == '1')
-                    {
-                        el += "!"+a;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '0')
-                    {
-                        el += b;
-                    }
-                    if (leg[i][1] == leg[(i + 1) % 4][1] && leg[i][1] == '1')
-                    {
-                        el += "!"+b;
-                    }
-                    if (s != "")
-                    {
-                        s += "+";
-                    }
-                    s += el;
-                }
-            }
-            return s;
-        }
-  
   static void IspisivanjeTablice()
     {
 		Console.ForegroundColor = ConsoleColor.White;
