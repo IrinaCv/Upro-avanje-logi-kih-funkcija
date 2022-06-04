@@ -1,8 +1,9 @@
 
 
-//Ispis u koracima
-//Kreiranje tablice na osnovu izraza
 
+//FALI PRONALAZAK DVOJKI,CETVORKI I OSMICA KADA IMA OD 2 DO 3 PROMENJIVE
+//FALI UNOS TABLICE PREKO ALGEBARSKOG IZRAZA
+//FALI ISPIS PO KORACIMA JER JE PROGRAM EDUKATIVNOG TIPA
 
 using System;
 class Program
@@ -11,9 +12,7 @@ class Program
   static string forma = "";
   static string[] simboli = new string[] {};
   static char dnfKnf = '1';
-
   static bool prekiniAlUnos = false;
-  
   static void Main (string[] args)
   {
       UnosPodataka();
@@ -37,10 +36,11 @@ class Program
               temp2[i, j] = matrica[i, j];
             }
         }
-
-      if (dnfKnf == '1') obrnutoDnfKnf = '0';
+      if (dnfKnf == '1')
+      {
+        obrnutoDnfKnf = '0';
+      } 
         else obrnutoDnfKnf = '1';
-
       //odredjivanje parametara tako da gledaju vodoravne podmatrice
       for (int br = 0; br < 7; br++)
         {
@@ -116,7 +116,7 @@ class Program
           //ako je posmatrana podmatrica dobra ovo ce je pretvoriti u odgovarajucu vrednost
           if (tacnost && provera)
             {
-              for (int i = pocetakY; i < krajY; i++)
+              /*for (int i = pocetakY; i < krajY; i++)
                 {
                    for (int j = pocetakX; j < krajX; j++) { temp[i % 4, j % 4] = trenutnaVelicina; matrica[i % 4, j % 4] = trenutnaVelicina; }
                 }
@@ -124,21 +124,21 @@ class Program
                 //smanjivanje
                 if(br == 0 || br == 2)//u ovim slucajevima su osmice
                 { 
-                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujOsmiceKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
-                            else krajnjiIzraz += MinimalizujOsmiceDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
+                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujOsmiceCetriPromKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
+                            else krajnjiIzraz += MinimalizujOsmiceCetriPromDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
                 }
                 else if(br == 1 || br == 3 || br == 4)//u ovim slucajevima su cetvorke
                 {
-                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujCetvorkeKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
-                            else krajnjiIzraz += MinimalizujCetvorkeDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
+                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujCetvorkeCetriPromKNF(matrica, a, b, c,d,br, pocetakX, pocetakY);
+                            else krajnjiIzraz += MinimalizujCetvorkeCetriPromDNFDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
                 }
                 else if(br == 5 || br == 6)//u ovim slucajevima su dvojke
                 {
-                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujDvojkeKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
-                            else krajnjiIzraz += MinimalizujDvojkeDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
+                  if(dnfKnf =='0')krajnjiIzraz += MinimalizujDvojkeCetriPromKNF(matrica, a, b, c, d,br, pocetakX, pocetakY);
+                            else krajnjiIzraz += MinimalizujDvojkeCetriPromDNF(matrica,a,b,c,d,br,pocetakX, pocetakY);
                 }
                 //crtanje
-                IspisivanjeTablice();
+                IspisivanjeTablice();*/
                 //ubacivanje starih vrednosti u matricu
                 for (int i = 0; i < 4; i++)
                   {
@@ -190,6 +190,8 @@ class Program
       }
     }
   }
+  
+  
   static string opcije(string[] mogucnosti, string ispis)//izbor knf/dnf ili izbor tablica/algebarski izraz
   {
       string s = "";
@@ -201,7 +203,7 @@ class Program
       }
       return s;
   }
-
+//unos podataka
   static void UnosPodataka()
   {
       forma = ""; matrica = new char[,]{};simboli = new string[]{};
@@ -379,7 +381,7 @@ class Program
         bool validno = false;
         while (!validno)
         {
-          bool greska = false, slovoGreska = false, razmakGreska = false;
+          bool greska = false, slovoGreska = false, razmakGreska = false, prviGreska = false, poslednjiGreska = false;
           Console.WriteLine("Unesite izraz: ");
           string s = Console.ReadLine();
           TraziPrekid(s);
@@ -401,15 +403,36 @@ class Program
             {
                broji = true;
             }
-          }
+          } 
+          int i = 0;
           foreach (string str in e)
           {
             string[] dozvoljeni = new string[] {"I", "AND", "*", "∙", "ILI", "OR", "+", "NE", "NOT", "¬", "′", "EksILI", "XOR", "⊕", "NI", "NAND","NILI","NOR", "(",")"};
-            if (!nizSadrzi(dozvoljeni, str) && !nizSadrzi(simboli, str))
+            if (i == 0) //prvi
             {
-                Array.Resize(ref simboli, simboli.Length+1);
-                simboli[simboli.Length-1] = str;
+               if (nizSadrzi(dozvoljeni, str) && str != "(")
+               {
+                  greska = true;
+                  prviGreska = true;
+               }
             }
+            else if (i == e.Length-1)//poslednji
+            {
+               if (nizSadrzi(dozvoljeni, str) && str != ")")
+               {
+                  greska = true;
+                  poslednjiGreska = true;
+               }
+            }
+            if (!greska)
+            {
+              if (!nizSadrzi(dozvoljeni, str) && !nizSadrzi(simboli, str))
+              {
+                  Array.Resize(ref simboli, simboli.Length+1);
+                  simboli[simboli.Length-1] = str;
+              }
+            }
+            i++;
           }
           foreach (string str in simboli)
           { if (!char.IsLetter(str[0])) {greska = true;  slovoGreska = true;}}
@@ -424,6 +447,8 @@ class Program
           else if (slovoGreska) Console.WriteLine("Simbol mora da počne slovom.");
           else if (simboli.Length == 0) Console.WriteLine("U izrazu nema simbola.");
           else if (razmakGreska) Console.WriteLine("Između svakog simbola i operacije mora da bude tačno jedan razmak.");
+          else if (prviGreska) Console.WriteLine("Izraz mora da počne otvorenom zagradom ili simbolom.");
+          else if (poslednjiGreska) Console.WriteLine("Na kraju izraza mogu da budu samo zatvorena zagrada ili simboli.");
         }
       }
       forma = opcije(new string[] {"KNF","DNF"},"KNF ili DNF : ");
@@ -433,7 +458,230 @@ class Program
     foreach (string str in niz) if (str == s) return true;
     return false;
   }
-  private static string MinimalizujDvojkeKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
+  //kraj unosa podataka
+  private static string MinimalizujDvojkeTriPromDNF(char[,] mat, string a, string b, string c, int brojac, int pocetakX, int pocetakY)
+        {
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            string[] leg1 = { "0", "1" };
+            string el = "";
+            //vertikalne dvojke
+            //ispisuje se x2 i x3
+            if (brojac == 0)//mora da se popravi kad jovan zavrsi
+            {
+                if (el != "")
+                {
+                    el += "+";
+                }
+                if (leg[pocetakX][0] == '0')
+                {
+                    el += "!" + b + "+";
+                }
+                else
+                {
+                    el += b + "+";
+                }
+                if (leg[pocetakX][1] == '1')
+                {
+                    el += c;
+                }
+                else
+                {
+                    el += "!" + c;
+                }
+                s += "(" + el + ")";
+            }
+            //vodoravne dvojke
+            // ispisano x1 i jedno od x2 i x3
+            if (brojac == 1)//mora da se popravi kad jovan zavrsi
+            {
+                if (leg1[pocetakY] == "0")
+                {
+                    el += "!" + a + "+";
+                }
+                else
+                {
+                    el +=a + "+";
+                }
+                //c d-kolona
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
+                {
+                    el +="!"+ b;
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
+                {
+                    el +=b;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el += "!" + c;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el += c;
+                }
+                s += "(" + el + ")";
+            }
+
+            return s;
+        }
+        private static string MinimalizujDvojkeTriPromKNF(char[,] mat, string a, string b, string c, int brojac, int pocetakX, int pocetakY)
+        {
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            string[] leg1 = { "0", "1" };
+            string el = "";
+            //vertikalne dvojke
+            //ispisuje se x2 i x3
+            if (brojac == 0)//mora da se popravi kad jovan zavrsi
+            {
+                if (el != "")
+                {
+                    el += "+";
+                }
+                if (leg[pocetakX][0] == '0')
+                {
+                    el +=b + "+";
+                }
+                else
+                {
+                    el +="!"+ b + "+";
+                }
+                if (leg[pocetakX][1] == '1')
+                {
+                    el +="!"+ c;
+                }
+                else
+                {
+                    el +=c;
+                }
+                s += "(" + el + ")";
+            }
+            //vodoravne dvojke
+            // ispisano x1 i jedno od x2 i x3
+            if (brojac == 1)//mora da se popravi kad jovan zavrsi
+            {
+                if (leg1[pocetakY] == "0")
+                {
+                    el +=a + "+";
+                }
+                else
+                {
+                    el += "!" + a + "+";
+                }
+                //c d-kolona
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
+                {
+                    el +=b;
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
+                {
+                    el += "!" + b;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el += c;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el += "!" + c;
+                }
+                s += "(" + el + ")";
+            }
+
+            return s;
+        }
+        private static string MinimalizujCetvorkeTriPromDNF(char[,] mat, string a, string b, string c, int brojac, int pocetakX, int pocetakY)
+        {
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            string[] leg1 = { "0", "1" };
+            string el = "";
+            //kvadratne cetvorke
+            if (brojac == 0)//mora da se popravi kad jovan zavrsi
+            {
+                if (el != "")
+                {
+                    el += "+";
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
+                {
+                    el += "!" + b;
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
+                {
+                    el += b;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el += "!" + c;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el += c;
+                }
+                s += el;
+            }
+            if (brojac == 1)//mora da se popravi kad jovan zavrsi
+            {
+                el = "";
+                if (leg1[pocetakY][0] == '0')
+                {
+                    el += "!" + a + "+";
+                }
+                else
+                {
+                    el += a + "+";
+                }
+            }
+            return s;
+        }
+        private static string MinimalizujCetvorkeTriPromKNF(char[,] mat, string a, string b, string c, int brojac, int pocetakX, int pocetakY)
+        {
+            string s = "";
+            string[] leg = { "00", "01", "11", "10" };
+            string[] leg1 = { "0", "1" };
+            string el = "";
+            //kvadratne cetvorke
+            if (brojac == 0)//mora da se popravi kad jovan zavrsi
+            {
+                if (el != "")
+                {
+                    el += "+";
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '0')
+                {
+                    el +=b;
+                }
+                if (leg[pocetakX][0] == leg[(pocetakX + 1) % 4][0] && leg[pocetakX][0] == '1')
+                {
+                    el += "!" + b;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
+                {
+                    el +=c;
+                }
+                if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
+                {
+                    el += "!" + c;
+                }
+                s += el;
+            }
+            if (brojac == 1)//mora da se popravi kad jovan zavrsi
+            {
+                el = "";
+                if (leg1[pocetakY] == "0")
+                {
+                    el += a + "+";
+                }
+                else
+                {
+                    el += "!" + a + "+";
+                }
+            }
+            return s;
+        }
+  private static string MinimalizujDvojkeCetriPromKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
@@ -529,7 +777,7 @@ class Program
             }
             return s;
         }
-   private static string MinimalizujDvojkeDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
+   private static string MinimalizujDvojkeCetriPromDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
         {
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
@@ -625,7 +873,7 @@ class Program
             }
             return s;
         }
-        private static string MinimalizujCetvorkeKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
+        private static string MinimalizujCetvorkeCetriPromKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
@@ -720,7 +968,7 @@ class Program
                     }
             return s;
         }
-private static string MinimalizujCetvorkeDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
+private static string MinimalizujCetvorkeCetriPromDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
         {
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
@@ -815,7 +1063,7 @@ private static string MinimalizujCetvorkeDNF(char[,] mat, string a, string b, st
             }
             return s;
         }
-        private static string MinimalizujOsmiceKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
+        private static string MinimalizujOsmiceCetriPromKNF(char[,] mat, string a, string b, string c, string d,int brojac,int pocetakX,int pocetakY)
         {
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
@@ -874,7 +1122,7 @@ private static string MinimalizujCetvorkeDNF(char[,] mat, string a, string b, st
 
             return s;
         }
-        private static string MinimalizujOsmiceDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
+        private static string MinimalizujOsmiceCetriPromDNF(char[,] mat, string a, string b, string c, string d, int brojac, int pocetakX, int pocetakY)
         {
             string s = "";
             string[] leg = { "00", "01", "11", "10" };
@@ -933,6 +1181,7 @@ private static string MinimalizujCetvorkeDNF(char[,] mat, string a, string b, st
 
             return s;
         }
+  
   static void IspisivanjeTablice()
     {
 		Console.ForegroundColor = ConsoleColor.White;
@@ -1051,15 +1300,3 @@ private static string MinimalizujCetvorkeDNF(char[,] mat, string a, string b, st
 		}
 	}
 }
-
-
-
-
-
-/*
-  Ispis u koracima (A i T)
-  Kreiranje tablice od algebarskog izraza
-  Dizajn tablice
-  Algoritmi resavanja tablica
-  nacin kako da program pravi one kocke
-*/
