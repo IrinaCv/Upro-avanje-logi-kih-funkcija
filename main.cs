@@ -10,8 +10,9 @@ class Program
     static string[] simboli = new string[] { };
     static char dnfKnf = ' ';
     static int bp; //brojPromenljivih
-    static bool prekiniAlUnos;
+    static bool prekiniUnos;
     static char trenutnaVelicina = '2';
+    static int pr;//koja tabela treba da se ispise za primere
 
     static void Main(string[] args)
     {
@@ -22,14 +23,13 @@ class Program
             forma = "";
             dnfKnf = ' ';
             bp = 0;
-            prekiniAlUnos = false;
+            prekiniUnos = false;
             simboli = new string[] { };
             char obrnutoDnfKnf;
             bool tacnost = true, provera = true, izvrsiloSe = false;
             int pocetakX = 0, pocetakY = 0, krajX = 0, krajY = 0, br = 0;
-            string krajnjiIzraz = "",trenutniIzraz="";
-            //UnosPodataka
-            UnosPodataka();
+            string krajnjiIzraz = "", trenutniIzraz = "";
+            UnosPodataka(); //Unos preko matrice ili prekidanje programa.
             char[,] MatricaSaPromenama = new char[matrica.GetLength(0), matrica.GetLength(1)];
             nepromenjenaMatrica = new char[matrica.GetLength(0), matrica.GetLength(1)];
             //pravi kopiju karte
@@ -147,34 +147,34 @@ class Program
                             for (int j = pocetakX; j < krajX; j++) { MatricaSaPromenama[i % matrica.GetLength(0), j % matrica.GetLength(1)] = trenutnaVelicina; matrica[i % matrica.GetLength(0), j % matrica.GetLength(1)] = trenutnaVelicina; }
                         }
                         //smanjivanje
-                        if ((br == 1 || br == 3) && bp == 4)//u ovim slucajevima su osmice
+                        if ((br == 1 || br == 3) && bp == 4)//Osmice cetiri promenljive
                         {
                             if (dnfKnf == '0')
                             {
                                 trenutniIzraz = MinimalizujOsmiceCetriPromKNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                                krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 trenutniIzraz = MinimalizujOsmiceCetriPromDNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
-                        else if ((br == 2 || br == 4 || br == 5) && bp == 4) //u ovim slucajevima su cetvorke
+                        else if ((br == 2 || br == 4 || br == 5) && bp == 4) //Cetvorke cetiri prom
                         {
                             if (dnfKnf == '0')
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "*";
-                                trenutniIzraz= MinimalizujCetvorkeCetriPromKNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                trenutniIzraz = MinimalizujCetvorkeCetriPromKNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = MinimalizujCetvorkeCetriPromDNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         else if ((br == 6 || br == 7) && bp == 4) //u ovim slucajevima su dvojke
@@ -184,14 +184,14 @@ class Program
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "*";
                                 trenutniIzraz = MinimalizujDvojkeCetriPromKNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = MinimalizujDvojkeCetriPromDNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         if (br == 8 && bp == 4)//IZOLOVAN SLUCAJ CETRI PROMENJIVE
@@ -201,14 +201,14 @@ class Program
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = IzolovanSlucajCetriPromenjiveKNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = IzolovanSlucajCetriPromenjiveDNF(simboli[0], simboli[1], simboli[2], simboli[3], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         if ((br == 5 || br == 4) && bp == 3)//CETVORKE TRI PROMENJIVE
@@ -218,14 +218,14 @@ class Program
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "*";
                                 trenutniIzraz = MinimalizujCetvorkeTriPromKNF(simboli[0], simboli[1], simboli[2], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = MinimalizujCetvorkeTriPromDNF(simboli[0], simboli[1], simboli[2], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         if ((br == 6 || br == 7) && bp == 3)//DVOJKE TRI PROMENJIVE
@@ -235,14 +235,14 @@ class Program
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "*";
                                 trenutniIzraz = MinimalizujDvojkeTriPromKNF(simboli[0], simboli[1], simboli[2], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = MinimalizujDvojkeTriPromDNF(simboli[0], simboli[1], simboli[2], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         if (br == 8 && bp == 3)//IZOLOVAN SLUCAJ
@@ -252,14 +252,14 @@ class Program
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = IzolovanSlucajTriPromenjiveKNF(simboli[0], simboli[1], simboli[2], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = IzolovanSlucajTriPromenjiveDNF(simboli[0], simboli[1], simboli[2], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         else if ((br == 6 || br == 7) && bp == 2) //DVOJKE DVE PROMENJIVE
@@ -269,14 +269,14 @@ class Program
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "*";
                                 trenutniIzraz = MinimalizujDvojkeDvePromKNF(simboli[0], simboli[1], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = MinimalizujDvojkeDvePromDNF(simboli[0], simboli[1], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         if (br == 8 && bp == 2)//IZOLOVAN SLUCAJ DVE PROMENJIVE
@@ -286,14 +286,14 @@ class Program
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz = IzolovanSlucajDvePromenjiveKNF(simboli[0], simboli[1], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                             else
                             {
                                 if (krajnjiIzraz != "")
                                     krajnjiIzraz += "+";
                                 trenutniIzraz += IzolovanSlucajDvePromenjiveDNF(simboli[0], simboli[1], br, pocetakX, pocetakY);
-                              krajnjiIzraz+= trenutniIzraz;
+                                krajnjiIzraz += trenutniIzraz;
                             }
                         }
                         if (br == 0 && bp == 4 && dnfKnf == '1')
@@ -368,8 +368,9 @@ class Program
             Console.WriteLine();
         }
     }
-    static string opcije(string[] mogucnosti, string ispis)//izbor knf/dnf ili izbor tablica/algebarski izraz
+    static string opcije(string[] mogucnosti, string ispis)//izbor knf/dnf ili izbor tablica/prekidanje
     {
+        //izbor izmedju dve ili vise opcija koji ce se ponavljati i nece prelaziti na sledeci korak dok se ne unese jedna od ponudjenih opcija.
         string s = "";
         while (!nizSadrzi(mogucnosti, s))
         {
@@ -379,19 +380,13 @@ class Program
         }
         return s;
     }
-    //unos podataka
     static void UnosPodataka()
     {
         forma = ""; matrica = new char[,] { }; simboli = new string[] { };
-        string izbor = opcije(new string[] { "KA", "TA", "PR"}, "Da li želite da unesete kartu ili da prekinete program?\n[KA] - unos direktno u kartu\n[TA] - unos tablicom istinitosti.\n[Pr] - prekini program\nMožete da prekinete program u bilo kom trenutnku.");
-        if (izbor == "KA")
-        {
-            UnosKarte();
-        }
-        else if(izbor == "TA")
-        {
-            UnosPrekoTablice();
-        }
+        string izbor = opcije(new string[] { "OB","KA", "TA", "PR" }, "Da li želite da vidite objasnjenje o karnoovim kartama, unesete kartu ili prekinete program?\n[OB] - objasnjenje o karnoovim kartama\n[KA] - unos direktno u kartu\n[TA] - unos tablicom istinitosti\n[PR] - prekini program\nMožete da prekinete program u bilo kom trenutnku.");
+        if (izbor == "OB")IspisivanjePrimera();
+        else if (izbor == "KA")UnosKarte();
+        else if (izbor == "TA")UnosPrekoTablice();
         else TraziPrekid(izbor);
     }
     static void TraziPrekid(string s)
@@ -409,7 +404,7 @@ class Program
         bp = 0;
         string bps = string.Empty;
         bool nijeValidno = true;
-        while (nijeValidno)
+        while (nijeValidno)//Unos broja promenljivih koji mora da bude izmedju 2 i 4.
         {
             bps = Console.ReadLine();
             nijeValidno = !int.TryParse(bps, out bp) || bp > 4 || bp < 2;
@@ -425,8 +420,7 @@ class Program
         }
         int x = 0;
         int y = 0;
-        //int x = (bp == 4 ? 4 : 2); 
-        //int y = (bp == 2 ? 2 : 4);
+        //velicina matrice na osnovu broja promenljvih.
         if (bp == 4)
         {
             x = 4;
@@ -466,6 +460,7 @@ class Program
             bool greskaRed = false;
             while (!validanRed)
             {
+                //unos redova matrice
                 validanRed = greskaRed = false;
                 int j = 0;
                 Console.WriteLine("Unesite " + (i + 1) + ". red :");
@@ -481,6 +476,7 @@ class Program
                 {
                     foreach (string clan in clanovi)
                     {
+                        //dozvoljeni samo 0,1,d,b
                         if (clan != "0" && clan != "1" && clan != "d" && clan != "b" && !greskaRed)
                         {
                             Console.WriteLine("Dozvoljene vrednosti su ''0'', ''1'', ''d'' i ''b''");
@@ -488,6 +484,7 @@ class Program
                         }
                         else if (!greskaRed)
                         {
+                            //popuniti matricu ako nema greske.
                             matrica[i, j] = Convert.ToChar(clan);
                             j++;
                         }
@@ -496,7 +493,7 @@ class Program
                 validanRed = !greskaRed;
             }
         }
-        forma = opcije(new string[] { "KNF", "DNF" }, "KNF ili DNF : ");
+        forma = opcije(new string[] { "KNF", "DNF" }, "KNF ili DNF : "); //odredjivanje forme, ponudjene su samo knf i dnf.
         dnfKnf = (forma == "KNF") ? '0' : '1';
         Console.WriteLine();
     }
@@ -510,7 +507,7 @@ class Program
         bool nijeValidno = true;
         Console.WriteLine("Koliko promenljivih želite?");
         bp = 0;
-        while (nijeValidno)
+        while (nijeValidno) //unos broja promenljivih (2/3/4)
         {
             bps = Console.ReadLine();
             nijeValidno = !int.TryParse(bps, out bp) || bp > 4 || bp < 2;
@@ -521,7 +518,7 @@ class Program
         int br = 1;
         while (br <= bp)
         {
-            UnosPromenljivih(ref br);
+            UnosPromenljivih(ref br); //unos promenljivih
         }
         int x = 0;
         int y = 0;
@@ -546,7 +543,7 @@ class Program
         Console.WriteLine("unesite 1, 0 ili d (b) u odnosu na to da li je funkcija u tom slucaju tacna netacna ili zanemarljiva");
         if (bp == 4)
         {
-            Console.WriteLine("{0},{1},{2},{3}",simboli[0],simboli[1],simboli[2],simboli[3]);
+            Console.WriteLine("{0},{1},{2},{3} f()", simboli[0], simboli[1], simboli[2], simboli[3]);
             for (int i = 0; i < y; i++)
             {
                 for (int j = 0; j < x; j++)
@@ -560,16 +557,21 @@ class Program
                         Console.Write(leg[j][0]);
                         for (int k = 0; k < simboli[2].Length; k++) Console.Write(" ");
                         Console.Write(leg[j][1]);
-                        for (int k = 0; k < simboli[3].Length+1; k++) Console.Write(" ");
+                        for (int k = 0; k < simboli[3].Length + 1; k++) Console.Write(" ");
                         red = Console.ReadLine();
-                        if (red.Length != 1)
+                        if (red.Length == 1)
+                        {
+                            funkcija = Convert.ToChar(red);
+                            if (funkcija == '1' || funkcija == '0' || funkcija == 'd' || funkcija == 'b') break;
+                            else { Console.WriteLine("uneli ste {0},a ne 1, 0 ili d (b)", funkcija); break; }
+                        }
+                        else if (red.ToUpper() == "PR") PrekiniProgram();
+                        else
                         {
                             Console.WriteLine("uneli ste vise od jednog karaktera, morate da unesete 1, 0 ili d (b)");
                             continue;
                         }
-                        funkcija = Convert.ToChar(red);
-                        if (funkcija == '1' || funkcija == '0' || funkcija == 'd' || funkcija == 'b') break;
-                        else Console.WriteLine("uneli ste {0},a ne 1, 0 ili d (b)", funkcija);
+
                     }
                     matrica[i, j] = funkcija;
                 }
@@ -577,7 +579,7 @@ class Program
         }
         if (bp == 3)
         {
-            Console.WriteLine("{0},{1},{2}", simboli[0], simboli[1], simboli[2]);
+            Console.WriteLine("{0},{1},{2} f()", simboli[0], simboli[1], simboli[2]);
             for (int i = 0; i < y; i++)
             {
                 for (int j = 0; j < x; j++)
@@ -591,14 +593,18 @@ class Program
                         Console.Write(leg1[j]);
                         for (int k = 0; k < simboli[2].Length + 1; k++) Console.Write(" ");
                         red = Console.ReadLine();
-                        if (red.Length != 1)
+                        if (red.Length == 1)
+                        {
+                            funkcija = Convert.ToChar(red);
+                            if (funkcija == '1' || funkcija == '0' || funkcija == 'd' || funkcija == 'b') break;
+                            else { Console.WriteLine("uneli ste {0},a ne 1, 0 ili d (b)", funkcija); break; }
+                        }
+                        else if (red.ToUpper() == "PR") PrekiniProgram();
+                        else
                         {
                             Console.WriteLine("uneli ste vise od jednog karaktera, morate da unesete 1, 0 ili d (b)");
                             continue;
                         }
-                        funkcija = Convert.ToChar(red);
-                        if (funkcija == '1' || funkcija == '0' || funkcija == 'd' || funkcija == 'b') break;
-                        else Console.WriteLine("uneli ste {0},a ne 1, 0 ili d (b)", funkcija);
                     }
                     matrica[i, j] = funkcija;
                 }
@@ -606,7 +612,7 @@ class Program
         }
         if (bp == 2)
         {
-            Console.WriteLine("{0},{1}", simboli[0], simboli[1]);
+            Console.WriteLine("{0}, {1} f()", simboli[0], simboli[1]);
             for (int i = 0; i < y; i++)
             {
                 for (int j = 0; j < x; j++)
@@ -618,14 +624,18 @@ class Program
                         Console.Write(leg1[j]);
                         for (int k = 0; k < simboli[1].Length + 1; k++) Console.Write(" ");
                         red = Console.ReadLine();
-                        if (red.Length != 1)
+                        if (red.Length == 1)
+                        {
+                            funkcija = Convert.ToChar(red);
+                            if (funkcija == '1' || funkcija == '0' || funkcija == 'd' || funkcija == 'b') break;
+                            else { Console.WriteLine("uneli ste {0},a ne 1, 0 ili d (b)", funkcija); break; }
+                        }
+                        else if (red.ToUpper() == "PR") PrekiniProgram();
+                        else
                         {
                             Console.WriteLine("uneli ste vise od jednog karaktera, morate da unesete 1, 0 ili d (b)");
                             continue;
                         }
-                        funkcija = Convert.ToChar(red);
-                        if (funkcija == '1' || funkcija == '0' || funkcija == 'd' || funkcija == 'b') break;
-                        else Console.WriteLine("uneli ste {0},a ne 1, 0 ili d (b)", funkcija);
                     }
                     matrica[i, j] = funkcija;
                 }
@@ -662,17 +672,18 @@ class Program
             TraziPrekid(u);
             if (u == ".")
             {
-                prekiniAlUnos = true;
+                prekiniUnos = true;
                 validanUnos = true;
             }
-            if (!prekiniAlUnos)
+            if (!prekiniUnos)
             {
                 int i = 0;
                 if (u.Length > 5)
                 {
                     Console.WriteLine("Vasa promenljiva ima vise od 5 karaktera probajte ponovo.");
                     v = false;
-                }else if (u == "")
+                }
+                else if (u == "")
                 {
                     Console.WriteLine("Niste nista uneli.");
                     v = false;
@@ -1076,7 +1087,7 @@ class Program
             if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '0')
                 el += d;
             if (leg[pocetakX][1] == leg[(pocetakX + 1) % 4][1] && leg[pocetakX][1] == '1')
-                el += "!" + c;
+                el += "!" + d;
             s += "(" + el + ")";
         }
         return s;
@@ -1359,15 +1370,17 @@ class Program
     {
         int visina = 0;
         int sirina = 0;
-        if (bp == 4) { visina = 11; sirina = 11; }
-        else if (bp == 3) { visina = 11; sirina = 7; }
-        else if (bp == 2) { visina = 7; sirina = 7; }
+        if (bp == 4 || pr == 4 || pr==1) { visina = 11; sirina = 11; }
+        else if (bp == 3 || pr == 3) { visina = 11; sirina = 7; }
+        else if (bp == 2 || pr == 2) { visina = 7; sirina = 7; }
+
         char vodoravna = '\u2500', uspravna = '\u2502';
         char goreL = '\u250C', goreD = '\u2510';
         char doleL = '\u2514', doleD = '\u2518';
         char srednjeL = '\u251C', srednjeD = '\u2524';
         char gornji = '\u252C', donji = '\u2534';
         char centralni = '\u253C';
+        int[,] matPr = { {0,1,3,2},{ 4,5,7,6},{ 12,13,15,16},{ 8,9,11,10} };
         int k = 0, j = 0;//brojaci za ispisivanje tablice
 
         for (int red = 0; red < visina; red++)
@@ -1380,59 +1393,107 @@ class Program
                     if (kol % 2 == 0) Console.Write(uspravna);
                     else
                     {
-                        Console.Write(' ');
-                        if (bp == 4)
+                        if (bp == 4 || pr==1)
                         {
                             switch (kol)
                             {
                                 case 1:
                                     Console.Write(' '); Console.Write(' ');
+                                    Console.Write(' '); Console.Write(' ');
                                     break;
                                 case 3:
-                                    Console.Write("00");
+                                    Console.Write(" 00 ");
                                     break;
                                 case 5:
-                                    Console.Write("01");
+                                    Console.Write(" 01 ");
                                     break;
                                 case 7:
-                                    Console.Write("11");
+                                    Console.Write(" 11 ");
                                     break;
                                 case 9:
-                                    Console.Write("10");
+                                    Console.Write(" 10 ");
                                     break;
                             }
                         }
-                        else if (bp == 3)
+                        else if (bp == 3 || bp == 2)
                         {
                             switch (kol)
                             {
                                 case 1:
                                     Console.Write(' '); Console.Write(' ');
+                                    Console.Write(' '); Console.Write(' ');
                                     break;
                                 case 3:
-                                    Console.Write(" 0");
+                                    Console.Write("  0 ");
                                     break;
                                 case 5:
-                                    Console.Write(" 1");
+                                    Console.Write("  1 ");
                                     break;
                             }
                         }
-                        else if (bp == 2)
+                        else if (pr == 2)//primer sa 2
                         {
                             switch (kol)
                             {
                                 case 1:
                                     Console.Write(' '); Console.Write(' ');
+                                    Console.Write(' '); Console.Write(' ');
                                     break;
                                 case 3:
-                                    Console.Write(" 0");
+                                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                    Console.Write("!x  ");
                                     break;
                                 case 5:
-                                    Console.Write(" 1");
+                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.Write(" x  ");
                                     break;
                             }
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
-                        Console.Write(' ');
+                        else if (pr == 3)//pr sa 3
+                        {
+                            switch (kol)
+                            {
+                                case 1:
+                                    Console.Write(' '); Console.Write(' ');
+                                    Console.Write(' '); Console.Write(' ');
+                                    break;
+                                case 3:
+                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.Write("!z  ");
+                                    break;
+                                case 5:
+                                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                    Console.Write(" z  ");
+                                    break;
+                            }
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        else if (pr == 4)//primer sa 4
+                        {
+                            switch (kol)
+                            {
+                                case 1:
+                                    Console.Write(' '); Console.Write(' ');
+                                    Console.Write(' '); Console.Write(' ');
+                                    break;
+                                case 3:
+                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.Write("!z!t");
+                                    break;
+                                case 5:
+                                    Console.Write("!zt ");
+                                    break;
+                                case 7:
+                                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                    Console.Write(" zt ");
+                                    break;
+                                case 9:
+                                    Console.Write("z!t ");
+                                    break;
+                            }
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
                     }
                 }
                 //redovi sa brojevima
@@ -1440,22 +1501,21 @@ class Program
                 {
                     if (kol == 1)
                     {
-                        Console.Write(' ');
-                        if (bp == 4 || bp == 3)
+                        if (bp == 4 || bp == 3 || pr==1)
                         {
                             switch (red)
                             {
                                 case 3:
-                                    Console.Write("00");
+                                    Console.Write(" 00 ");
                                     break;
                                 case 5:
-                                    Console.Write("01");
+                                    Console.Write(" 01 ");
                                     break;
                                 case 7:
-                                    Console.Write("11");
+                                    Console.Write(" 11 ");
                                     break;
                                 case 9:
-                                    Console.Write("10");
+                                    Console.Write(" 10 ");
                                     break;
                             }
                         }
@@ -1464,23 +1524,66 @@ class Program
                             switch (red)
                             {
                                 case 3:
-                                    Console.Write(" 0");
+                                    Console.Write("  0 ");
                                     break;
                                 case 5:
-                                    Console.Write(" 1");
+                                    Console.Write("  1 ");
                                     break;
                             }
                         }
-                        Console.Write(' ');
+                        else if (pr == 2)//primer sa 2
+                        {
+                            switch (red)
+                            {
+                                case 1:
+                                    Console.Write(' '); Console.Write(' ');
+                                    Console.Write(' '); Console.Write(' ');
+                                    break;
+                                case 3:
+                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.Write(" !y ");
+                                    break;
+                                case 5:
+                                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                    Console.Write("  y ");
+                                    break;
+
+                            }
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                        else if (pr == 3 || pr == 4)//primer sa 3 i 4
+                        {
+                            switch (red)
+                            {
+                                case 1:
+                                    Console.Write(' '); Console.Write(' ');
+                                    Console.Write(' '); Console.Write(' ');
+                                    break;
+                                case 3:
+                                    Console.Write("!x!y");
+                                    break;
+                                case 5:
+                                    Console.Write("!xy ");
+                                    break;
+                                case 7:
+                                    Console.ForegroundColor = ConsoleColor.Magenta;
+                                    Console.Write(" xy ");
+                                    break;
+                                case 9:
+                                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                    Console.Write("x!y ");
+                                    break;
+                            }
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
                     }
                     else if (kol % 2 == 0) Console.Write(uspravna);
                     //ispisivanje vrednosti u tablicu
                     else
                     {
-                        Console.Write(' ');
-                        Console.Write(' ');
                         if (dnfKnf != ' ')
                         {
+                            Console.Write(' '); Console.Write(' ');
                             if (matrica[k, j] == trenutnaVelicina)
                             {
                                 Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -1494,13 +1597,74 @@ class Program
                             Console.Write(' ');
                             j++;
                             if (j == matrica.GetLength(1)) { j = 0; k++; }
-                            Console.ForegroundColor = ConsoleColor.White;
+
+                        }
+                        //primer za mesta u tabeli
+                        else if (pr == 1)
+                        {
+                            if(red==7 ||(red==9 &&(kol==7||kol==9))) {Console.Write(' ');Console.Write(matPr[k, j]);}
+                            else 
+                            {
+                                Console.Write(' '); 
+                                Console.Write(' '); 
+                                Console.Write(matPr[k, j]); 
+                            }
+                            
+                            Console.Write(' ');
+                            j++;
+                            if (j == matPr.GetLength(1)) { j = 0; k++; }
+                        }
+                        //funkcije za primer sa 2 promenljive
+                        else if (pr == 2 && red == 3 && kol == 5)
+                        {
+                            Console.Write(' '); Console.Write(' ');
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.Write(1);
+                            Console.Write(' ');
+                        }
+                        else if (pr == 2 && red == 5 && kol == 3)
+                        {
+                            Console.Write(' '); Console.Write(' ');
+                            Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            Console.Write(1);
+                            Console.Write(' ');
+                        }
+                        //funkcije za primer sa 3 promenljive
+                        else if (pr == 3 && red == 7 && kol == 3)
+                        {
+                            Console.Write(' '); Console.Write(' ');
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.Write(1);
+                            Console.Write(' ');
+                        }
+                        else if (pr == 3 && red == 9 && kol == 5)
+                        {
+                            Console.Write(' '); Console.Write(' ');
+                            Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            Console.Write(1);
+                            Console.Write(' ');
+                        }
+                        //funkcije za primer sa 4 promenljive
+                        else if (pr == 4 && red == 7 && kol == 3)
+                        {
+                            Console.Write(' '); Console.Write(' ');
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.Write(1);
+                            Console.Write(' ');
+                        }
+                        else if (pr == 4 && red == 9 && kol == 7)
+                        {
+                            Console.Write(' '); Console.Write(' ');
+                            Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            Console.Write(1);
+                            Console.Write(' ');
                         }
                         else
                         {
-                            Console.Write(' ');
-                            Console.Write(' ');
+                            Console.Write(' '); Console.Write(' ');
+                            Console.Write(' '); Console.Write(' ');
                         }
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
 
                 }
@@ -1540,5 +1704,44 @@ class Program
             }
             Console.WriteLine();
         }
+    }
+
+    static void IspisivanjePrimera()
+    {
+       Console.WriteLine("Kod karnoovih mapa postoji mogućnost za izradu sa 2,3 i 4 promenljive."); 
+        for (int i = 0; i < 4; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    Console.WriteLine("Mesta u tabeli");
+                    pr = 1;
+                    break;
+                case 1:
+                    Console.WriteLine("Karnoova mapa za funkciju sa dve promenljive x i y sastoji se od 4 polja.\n Svako od tih polja rezervisano je za jednu moguću konjunkciju promenljivih ili njihovih negacija.\n " +
+                        "Ukoliko se određena konjunkcija pojavljuje u funkciji, onda se u dato polje zapisuje 1, a ako se ne pojavljuje, ne zapisuje se ništa.");
+                    Console.WriteLine("Za funkcije !xy i x!y u slučaju sa 2 promenljive:");
+                    pr = 2;
+                    break;
+                case 2:
+                    Console.WriteLine("Pronalaženje odgovarajućeg polja za funkciju sa tri i četiri promenljive se  izvrsava putem eliminacijom polja koja ne zadovoljavaju.");
+                    Console.WriteLine("Za funkciju xy!z i x!yz u slucaju sa 3 promenljive:");
+                    pr = 3;
+                    break;
+                case 3:
+                    Console.WriteLine("Za funkciju xy!z!t i x!yzt u slucaju sa 4 promenljive:");
+                    pr = 4;
+                    break;
+                
+
+            }
+            IspisivanjeTablice();
+        }
+        Console.WriteLine("Proces minimizacije se sastoji u grupisanju jedinica u okviru mape u veće celine.\n U zavisnosti od KNF i DNF u grupe se uzimaju 1 ili 0.\n " +
+            "Može se grupisati: 1 polje samostalno, 2 polja, 4 polja, 8 polja ili 16 polja.\n Grupe mogu biti horizontalne,vertikalne ili sa strana.\n " +
+            "Može zamisliti kao da je tabela nacrtana na valjku i zato mogu da se izvuku grupe sa strana. ");
+        Console.WriteLine("Određivanje analitičkog oblika minimalne forme logičke funkcije na osnovu toga što za svaku formiranu grupu definiše se \nkonjunkcija promenljivih ili njihovih negacija, " +
+            "ali samo onih koje su za celu grupu nepromenjene.");
+        UnosPodataka();
     }
 }
